@@ -1,44 +1,58 @@
-import org.junit.jupiter.api.Test;
-import java.util.List;
 import java.util.ArrayList;
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
-public class UseCase12TrainConsistMgmtTest {
+public class UseCase13TrainConsistMgmt {
 
-    @Test
-    void testSafety_AllBogiesValid() {
-        List<UseCase12TrainConsistMgmt.GoodsBogie> bogies = new ArrayList<>();
-        bogies.add(new UseCase12TrainConsistMgmt.GoodsBogie("Cylindrical", "Petroleum"));
-        bogies.add(new UseCase12TrainConsistMgmt.GoodsBogie("Open", "Coal"));
-        assertTrue(bogies.stream().allMatch(b -> !"Cylindrical".equalsIgnoreCase(b.type) || "Petroleum".equalsIgnoreCase(b.cargo)));
+    static class Bogie {
+        String type;
+        int capacity;
+
+        Bogie(String type, int capacity) {
+            this.type = type;
+            this.capacity = capacity;
+        }
+
+        @Override
+        public String toString() {
+            return type + " -> " + capacity;
+        }
     }
 
-    @Test
-    void testSafety_CylindricalWithInvalidCargo() {
-        List<UseCase12TrainConsistMgmt.GoodsBogie> bogies = new ArrayList<>();
-        bogies.add(new UseCase12TrainConsistMgmt.GoodsBogie("Cylindrical", "Coal"));
-        assertFalse(bogies.stream().allMatch(b -> !"Cylindrical".equalsIgnoreCase(b.type) || "Petroleum".equalsIgnoreCase(b.cargo)));
-    }
+    public static void main(String[] args) {
+        System.out.println("=========================================");
+        System.out.println(" UC13 - Performance Comparison (Loops vs Streams) ");
+        System.out.println("=========================================\n");
 
-    @Test
-    void testSafety_NonCylindricalBogiesAllowed() {
-        List<UseCase12TrainConsistMgmt.GoodsBogie> bogies = new ArrayList<>();
-        bogies.add(new UseCase12TrainConsistMgmt.GoodsBogie("Open", "Grain"));
-        bogies.add(new UseCase12TrainConsistMgmt.GoodsBogie("Box", "Coal"));
-        assertTrue(bogies.stream().allMatch(b -> !"Cylindrical".equalsIgnoreCase(b.type) || "Petroleum".equalsIgnoreCase(b.cargo)));
-    }
+        List<Bogie> bogies = new ArrayList<>();
+        for (int i = 1; i <= 100000; i++) {
+            bogies.add(new Bogie("Bogie-" + i, (i % 100) + 1)); // capacities between 1 and 100
+        }
 
-    @Test
-    void testSafety_MixedBogiesWithViolation() {
-        List<UseCase12TrainConsistMgmt.GoodsBogie> bogies = new ArrayList<>();
-        bogies.add(new UseCase12TrainConsistMgmt.GoodsBogie("Cylindrical", "Petroleum"));
-        bogies.add(new UseCase12TrainConsistMgmt.GoodsBogie("Cylindrical", "Coal"));
-        assertFalse(bogies.stream().allMatch(b -> !"Cylindrical".equalsIgnoreCase(b.type) || "Petroleum".equalsIgnoreCase(b.cargo)));
-    }
+        long loopStart = System.nanoTime();
+        List<Bogie> loopFiltered = new ArrayList<>();
+        for (Bogie b : bogies) {
+            if (b.capacity > 60) {
+                loopFiltered.add(b);
+            }
+        }
+        long loopEnd = System.nanoTime();
+        long loopTime = loopEnd - loopStart;
 
-    @Test
-    void testSafety_EmptyBogieList() {
-        List<UseCase12TrainConsistMgmt.GoodsBogie> bogies = new ArrayList<>();
-        assertTrue(bogies.stream().allMatch(b -> !"Cylindrical".equalsIgnoreCase(b.type) || "Petroleum".equalsIgnoreCase(b.cargo)));
+        long streamStart = System.nanoTime();
+        List<Bogie> streamFiltered = bogies.stream()
+                .filter(b -> b.capacity > 60)
+                .collect(Collectors.toList());
+        long streamEnd = System.nanoTime();
+        long streamTime = streamEnd - streamStart;
+
+        System.out.println("Loop Execution Time (ns): " + loopTime);
+        System.out.println("Stream Execution Time (ns): " + streamTime);
+
+        System.out.println("Loop result size: " + loopFiltered.size());
+        System.out.println("Stream result size: " + streamFiltered.size());
+        System.out.println("Results match: " + (loopFiltered.size() == streamFiltered.size()));
+
+        System.out.println("\nUC13 performance benchmarking completed...");
     }
 }
