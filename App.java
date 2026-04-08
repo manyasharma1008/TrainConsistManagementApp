@@ -1,23 +1,53 @@
-import java.util.Scanner;
+import org.junit.jupiter.api.Test;
 
-public class UseCase11TrainIDCargoValidation {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+import static org.junit.jupiter.api.Assertions.*;
 
-        System.out.print("Enter Train ID (Format: TRN-1234): ");
-        String trainId = sc.nextLine();
+public class UseCase11TrainIDCargoValidationTest {
 
-        System.out.print("Enter Cargo Code (Format: PET-AB): ");
-        String cargoCode = sc.nextLine();
+    @Test
+    void testRegex_ValidTrainID() {
+        assertTrue(RegexValidatorUtil.isValidTrainId("TRN-1234"));
+    }
 
-        boolean isTrainIdValid = RegexValidatorUtil.isValidTrainId(trainId);
-        boolean isCargoCodeValid = RegexValidatorUtil.isValidCargoCode(cargoCode);
+    @Test
+    void testRegex_InvalidTrainIDFormat() {
+        assertFalse(RegexValidatorUtil.isValidTrainId("TRAIN12"));
+        assertFalse(RegexValidatorUtil.isValidTrainId("TRN12A"));
+        assertFalse(RegexValidatorUtil.isValidTrainId("1234-TRN"));
+    }
 
-        System.out.println("\nValidation Results:");
-        System.out.println("Train ID Valid: " + isTrainIdValid);
-        System.out.println("Cargo Code Valid: " + isCargoCodeValid);
+    @Test
+    void testRegex_TrainIDDigitLengthValidation() {
+        assertFalse(RegexValidatorUtil.isValidTrainId("TRN-123"));
+        assertFalse(RegexValidatorUtil.isValidTrainId("TRN-12345"));
+    }
 
-        System.out.println("\nUC11 validation completed...");
-        sc.close();
+    @Test
+    void testRegex_ValidCargoCode() {
+        assertTrue(RegexValidatorUtil.isValidCargoCode("PET-AB"));
+    }
+
+    @Test
+    void testRegex_InvalidCargoCodeFormat() {
+        assertFalse(RegexValidatorUtil.isValidCargoCode("PET-ab"));
+        assertFalse(RegexValidatorUtil.isValidCargoCode("PET123"));
+        assertFalse(RegexValidatorUtil.isValidCargoCode("AB-PET"));
+    }
+
+    @Test
+    void testRegex_CargoCodeUppercaseValidation() {
+        assertFalse(RegexValidatorUtil.isValidCargoCode("PET-ab"));
+    }
+
+    @Test
+    void testRegex_EmptyInputHandling() {
+        assertFalse(RegexValidatorUtil.isValidTrainId(""));
+        assertFalse(RegexValidatorUtil.isValidCargoCode(""));
+    }
+
+    @Test
+    void testRegex_ExactPatternMatch() {
+        assertFalse(RegexValidatorUtil.isValidTrainId("TRN-1234X"));
+        assertFalse(RegexValidatorUtil.isValidCargoCode("PET-ABC"));
     }
 }
