@@ -1,7 +1,7 @@
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class UseCase8TrainConsistMgmtTest {
+public class App {
 
     static class Bogie {
         String name;
@@ -20,26 +20,30 @@ public class UseCase8TrainConsistMgmtTest {
 
     public static void main(String[] args) {
 
-        System.out.println("UCB - Filter Passenger Bogies Using Streams");
-        System.out.println("===========================================");
+        System.out.println("UC9 - Group Bogies By Type Using Streams");
+        System.out.println("========================================");
 
         List<Bogie> bogies = Arrays.asList(
                 new Bogie("Sleeper", 72),
                 new Bogie("AC Chair", 56),
+                new Bogie("Sleeper", 60),
                 new Bogie("First Class", 24),
-                new Bogie("General", 90)
+                new Bogie("General", 90),
+                new Bogie("AC Chair", 50)
         );
 
         System.out.println("\nAll Bogies:");
         bogies.forEach(System.out::println);
 
-        List<Bogie> filteredBogies = bogies.stream()
-                .filter(b -> b.capacity > 60)
-                .collect(Collectors.toList());
+        Map<String, List<Bogie>> groupedBogies = bogies.stream()
+                .collect(Collectors.groupingBy(b -> b.name));
 
-        System.out.println("\nFiltered Bogies (Capacity > 60):");
-        filteredBogies.forEach(System.out::println);
+        System.out.println("\nGrouped Bogies:");
+        for (Map.Entry<String, List<Bogie>> entry : groupedBogies.entrySet()) {
+            System.out.println("\n" + entry.getKey() + ":");
+            entry.getValue().forEach(System.out::println);
+        }
 
-        System.out.println("\nUCB filtering completed...");
+        System.out.println("\nUC9 grouping completed...");
     }
 }
