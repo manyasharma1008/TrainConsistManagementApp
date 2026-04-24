@@ -1,45 +1,22 @@
+import java.util.Arrays;
 
 public class App {
 
     public static void main(String[] args) {
         System.out.println("==============================================");
-        System.out.println("Use Case 16 - Manual Sorting using Bubble Sort ");
+        System.out.println("Use Case 17 - Sort Bogie Names using Arrays.sort()");
         System.out.println("==============================================\n");
 
-        int[] capacities = {72, 56, 24, 70, 60};
+        String[] bogieNames = {"Sleeper", "AC Chair", "First Class", "General", "Luxury"};
 
-        System.out.println("Original Capacities:");
-        printArray(capacities);
+        System.out.println("Original Bogie Names:");
+        System.out.println(Arrays.toString(bogieNames));
 
-        bubbleSort(capacities);
+        Arrays.sort(bogieNames);
 
-        System.out.println("\nSorted Capacities (Ascending):");
-        printArray(capacities);
+        System.out.println("\nSorted Bogie Names (Alphabetical):");
+        System.out.println(Arrays.toString(bogieNames));
 
-        System.out.println("\nUC16 sorting completed...");
-    }
-
-    public static void bubbleSort(int[] arr) {
-        int n = arr.length;
-        boolean swapped;
-        for (int i = 0; i < n - 1; i++) {
-            swapped = false;
-            for (int j = 0; j < n - i - 1; j++) {
-                if (arr[j] > arr[j + 1]) {
-                    int temp = arr[j];
-                    arr[j] = arr[j + 1];
-                    arr[j + 1] = temp;
-                    swapped = true;
-                }
-            }
-            if (!swapped) break;
-        }
-    }
-
-    public static void printArray(int[] arr) {
-        for (int c : arr) {
-            System.out.print(c + " ");
-        }
-        System.out.println();
+        System.out.println("\nUC17 sorting completed...");
     }
 }
