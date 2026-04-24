@@ -1,45 +1,45 @@
+
 public class App {
 
-    static class CargoSafetyException extends RuntimeException {
-        public CargoSafetyException(String message) {
-            super(message);
-        }
-    }
-
-    static class GoodsBogie {
-        String shape;
-        String cargo;
-
-        GoodsBogie(String shape) {
-            this.shape = shape;
-        }
-
-        void assignCargo(String cargo) {
-            try {
-                if ("Rectangular".equalsIgnoreCase(shape) && "Petroleum".equalsIgnoreCase(cargo)) {
-                    throw new CargoSafetyException("Unsafe cargo assignment!");
-                }
-                this.cargo = cargo;
-                System.out.println("Cargo assigned successfully -> " + cargo);
-            } catch (CargoSafetyException e) {
-                System.out.println("Error: " + e.getMessage());
-            } finally {
-                System.out.println("Cargo validation completed for " + shape + " bogie");
-            }
-        }
-    }
-
     public static void main(String[] args) {
-        System.out.println("===============================================");
-        System.out.println("UC15 - Safe Cargo Assignment");
-        System.out.println("===============================================\n");
+        System.out.println("==============================================");
+        System.out.println("Use Case 16 - Manual Sorting using Bubble Sort ");
+        System.out.println("==============================================\n");
 
-        GoodsBogie cylindrical = new GoodsBogie("Cylindrical");
-        cylindrical.assignCargo("Petroleum"); // safe
+        int[] capacities = {72, 56, 24, 70, 60};
 
-        GoodsBogie rectangular = new GoodsBogie("Rectangular");
-        rectangular.assignCargo("Petroleum"); // unsafe
+        System.out.println("Original Capacities:");
+        printArray(capacities);
 
-        System.out.println("\nUC15 runtime handling completed...");
+        bubbleSort(capacities);
+
+        System.out.println("\nSorted Capacities (Ascending):");
+        printArray(capacities);
+
+        System.out.println("\nUC16 sorting completed...");
+    }
+
+    public static void bubbleSort(int[] arr) {
+        int n = arr.length;
+        boolean swapped;
+        for (int i = 0; i < n - 1; i++) {
+            swapped = false;
+            for (int j = 0; j < n - i - 1; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                    swapped = true;
+                }
+            }
+            if (!swapped) break;
+        }
+    }
+
+    public static void printArray(int[] arr) {
+        for (int c : arr) {
+            System.out.print(c + " ");
+        }
+        System.out.println();
     }
 }
