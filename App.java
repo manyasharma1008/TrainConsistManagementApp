@@ -1,22 +1,37 @@
-import java.util.Arrays;
 
 public class App {
 
     public static void main(String[] args) {
         System.out.println("==============================================");
-        System.out.println("Use Case 17 - Sort Bogie Names using Arrays.sort()");
+        System.out.println("Use Case 18 - Linear Search for Bogie ID");
         System.out.println("==============================================\n");
 
-        String[] bogieNames = {"Sleeper", "AC Chair", "First Class", "General", "Luxury"};
+        String[] bogieIds = {"BG101", "BG205", "BG309", "BG412", "BG550"};
 
-        System.out.println("Original Bogie Names:");
-        System.out.println(Arrays.toString(bogieNames));
+        String searchId = "BG309";
 
-        Arrays.sort(bogieNames);
+        System.out.println("Available Bogie IDs:");
+        for (String id : bogieIds) {
+            System.out.println(id);
+        }
 
-        System.out.println("\nSorted Bogie Names (Alphabetical):");
-        System.out.println(Arrays.toString(bogieNames));
+        boolean found = linearSearch(bogieIds, searchId);
 
-        System.out.println("\nUC17 sorting completed...");
+        if (found) {
+            System.out.println("\nBogie " + searchId + " found in train consist.");
+        } else {
+            System.out.println("\nBogie " + searchId + " not found in train consist.");
+        }
+
+        System.out.println("\nUC18 search completed...");
+    }
+
+    public static boolean linearSearch(String[] arr, String key) {
+        for (String id : arr) {
+            if (id.equals(key)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
